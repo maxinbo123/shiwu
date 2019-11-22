@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.trading.mapper.TOrderMapper">
+
+    <resultMap type="com.example.trading.entity.TOrder" id="TOrderMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="orderNo" column="order_no" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="commodityCode" column="commodity_code" jdbcType="VARCHAR"/>
+        <result property="count" column="count" jdbcType="INTEGER"/>
+        <result property="amount" column="amount" jdbcType="DOUBLE"/>
+        <result property="tccId" column="tcc_id" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_no, user_id, commodity_code, count, amount
+    </sql>
+    <!--创建订单-->
+    <insert id="createOrder" keyProperty="id" useGeneratedKeys="true">
+        insert into t_order (order_no,user_id,commodityCode,count,amount,tcc_id)value
+        (#{order.orderNo},#{order.userId},#{order.commodityCode},#{order.count},#{order.amount},#{order.tccId})
+    </insert>
+
+    <delete id="deleteOrder">
+        DELETE from t_order where order_no=#{orderNo}
+    </delete>
+
+</mapper>

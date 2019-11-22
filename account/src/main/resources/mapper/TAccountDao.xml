@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seata.account.mapper.TAccountDao">
+
+    <resultMap type="com.seata.account.entity.TAccount" id="TAccountMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="amount" column="amount" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, amount
+    </sql>
+    <update id="decreaseAccount">
+        update t_account set amount = amount-${amount} where user_id = #{userId}
+    </update>
+
+
+</mapper>

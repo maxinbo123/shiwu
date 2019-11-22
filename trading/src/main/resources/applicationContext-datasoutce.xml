@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <context:property-placeholder location="file:/home/admin/config/seata/trading-config.properties"/>
+
+
+    <bean id="dataSource"
+    class="com.alibaba.druid.pool.DruidDataSource"
+    destroy-method="close">
+    <property name="url" value="${data.url}"/>
+    <property name="username" value="${data.name}"/>
+    <property name="password" value="${data.pass}"/>
+    <property name="maxActive" value="${data.maxActive}"/>
+    <property name="minIdle" value="${data.minIdle}"/>
+    <property name="initialSize" value="${data.initialSize}"/>
+    <property name="logAbandoned" value="${data.logAbandoned}"/>
+    <property name="removeAbandoned" value="${data.removeAbandoned}"/>
+    <property name="removeAbandonedTimeout" value="${data.removeAbandonedTimeout}"/>
+    <property name="maxWait" value="${data.maxWait}"/>
+    <property name="timeBetweenEvictionRunsMillis" value="10000"/>
+    <property name="minEvictableIdleTimeMillis" value="10000"/>
+    <property name="validationQuery" value="SELECT NOW() FROM DUAL"/>
+    </bean>
+    <bean id="cbasecoreTransactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+</beans>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.trading.mapper.TStorageMapper">
+
+    <resultMap type="com.example.trading.entity.TStorage" id="TStorageMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="commodityCode" column="commodity_code" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="count" column="count" jdbcType="INTEGER"/>
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, commodity_code, name, count
+    </sql>
+
+    <update id="decreaseStorage">
+        update t_storage set count = count-${count},tcc_id= #{tccId} where commodity_code = #{commodityCode}
+    </update>
+    <update id="addStorage">
+        update t_storage set count = count+${count}  where commodity_code = #{commodityCode}
+
+    </update>
+</mapper>
