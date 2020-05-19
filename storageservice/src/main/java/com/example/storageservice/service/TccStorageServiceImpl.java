@@ -1,5 +1,6 @@
 package com.example.storageservice.service;
 
+import com.alibaba.nacos.api.config.annotation.NacosValue;
 import com.example.commfacade.dto.CommodityDTO;
 import com.example.commfacade.dto.ResponseData;
 import com.example.commfacade.service.TccStorageService;
@@ -8,7 +9,6 @@ import org.mengyun.tcctransaction.api.Compensable;
 import org.mengyun.tcctransaction.dubbo.context.DubboTransactionContextEditor;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
@@ -17,6 +17,10 @@ import java.util.Random;
  */
 public class TccStorageServiceImpl implements TccStorageService {
     private Logger logger = org.slf4j.LoggerFactory.getLogger("tccstorage");
+
+    @NacosValue(value = "${storage.probability}", autoRefreshed = true)
+    private Integer storageProbability;
+
     @Autowired
     private TStorageMapper tStorageMapper;
 
@@ -27,9 +31,13 @@ public class TccStorageServiceImpl implements TccStorageService {
         if("fail".equals(commodityDTO.getFlag())){
             Random random = new Random();
             int num = random.nextInt(100);
-            if(num < 3){
+            if(num < storageProbability){
+                logger.info("随机数："+num + "概率："+storageProbability);
                 throw new RuntimeException("测试异常");
             }
+        }
+        if("lan".equals(commodityDTO.getFlag())){
+            throw new RuntimeException("测试异常");
         }
         if (storage > 0){
             return new ResponseData("200","success");

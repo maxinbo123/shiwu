@@ -23,6 +23,17 @@ public class CommodityDTO implements Serializable {
     //测试异常标识
     private String flag;
 
+    //预减库存值
+    private Integer preCount;
+
+    public Integer getPreCount() {
+        return preCount;
+    }
+
+    public void setPreCount(Integer preCount) {
+        this.preCount = preCount;
+    }
+
     public String getFlag() {
         return flag;
     }

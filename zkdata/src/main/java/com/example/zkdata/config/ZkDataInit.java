@@ -17,12 +17,21 @@ import java.util.Set;
 public class ZkDataInit {
     private static volatile ZkClient zkClient;
 
+
+    /*public static void main(String[] args) {
+        if (zkClient == null) {
+            zkClient = new ZkClient("172.30.66.155:2181,172.30.66.155:2182,172.30.66.155:2183", 6000, 3000);
+        }
+        String val = zkClient.readData("/seata/store.db.dbType");
+        System.out.println("jieguo: "+val);
+    }*/
     public static void main(String[] args) {
         if (zkClient == null) {
-            zkClient = new ZkClient("127.0.0.1:2181", 6000, 2000);
+            //zkClient = new ZkClient("172.30.66.155:2181,172.30.66.155:2182,172.30.66.155:2183", 6000, 3000);
+            zkClient = new ZkClient("172.30.65.13:2181", 6000, 3000);
         }
-        if (!zkClient.exists("/config")) {
-            zkClient.createPersistent("/config", true);
+        if (!zkClient.exists("/seata")) {
+            zkClient.createPersistent("/seata", true);
         }
         //获取key对应的value值
         Properties properties = new Properties();
@@ -35,6 +44,7 @@ public class ZkDataInit {
             Set<Object> keys = properties.keySet();//返回属性key的集合
             for (Object key : keys) {
                 boolean b = putConfig(key.toString(), properties.get(key).toString());
+                System.out.print("结果："+b);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -49,7 +59,7 @@ public class ZkDataInit {
      */
     public static boolean putConfig(final String dataId, final String content) {
         Boolean flag = false;
-        String path = "/config/" + dataId;
+        String path = "/seata/" + dataId;
         if (!zkClient.exists(path)) {
             zkClient.create(path, content, CreateMode.PERSISTENT);
             flag = true;

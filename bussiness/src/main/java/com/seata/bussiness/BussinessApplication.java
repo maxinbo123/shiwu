@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ImportResource;
 @SpringBootApplication(scanBasePackages = "com.seata.bussiness")
 @EnableDiscoveryClient
 @EnableDubbo(scanBasePackages = "com.seata.bussiness")
+@ImportResource({ "classpath:applicationContext-traceId.xml" })
 public class BussinessApplication {
 
 	public static void main(String[] args) {

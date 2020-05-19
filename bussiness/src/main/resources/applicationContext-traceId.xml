@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+       xmlns:context="http://www.springframework.org/schema/context"   
+       xmlns:aop="http://www.springframework.org/schema/aop"  
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd  
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd  
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd  ">
+ 	 
+     <bean id="traceIdUtil" class="com.alibaba.dubbo.rpc.proxy.TraceIdUtilInterceptor"/>  
+     <!-- 所有业务调用方的入口处，需要添加此配置，目的是业务流程保证有且仅有一个traceId，业务日志一定要输出此traceId，以便业务追踪 -->
+     <aop:config>
+
+         <aop:aspect id="clc" ref="traceIdUtil">
+             <aop:pointcut id="clcActivity"
+                           expression="(execution( * com.seata.bussiness.controller.BusinessController.*(..)))"/>
+             <aop:before pointcut-ref="clcActivity" method="doBefore"/>
+             <aop:after pointcut-ref="clcActivity" method="doAfter"/>
+         </aop:aspect>
+     </aop:config>
+
+      <!-- 使用注解自动生成代理对象 -->
+      <aop:aspectj-autoproxy/>
+</beans> 

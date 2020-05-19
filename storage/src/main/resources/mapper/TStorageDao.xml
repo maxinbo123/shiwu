@@ -17,4 +17,26 @@
         update t_storage set count = count-${count} where commodity_code = #{commodityCode}
     </update>
 
+    <select id="getStorageForUpdate" resultType="Integer">
+        select count from t_storage where commodity_code = #{commodityCode} for update
+    </select>
+
+
+    <update id="preDecreaseStorage">
+        update t_storage set pre_count =  ${count} where commodity_code = #{commodityCode}
+    </update>
+
+    <update id="trueDecStorage">
+        update t_storage set count = count-${count}, pre_count=0 where commodity_code = #{commodityCode}
+    </update>
+
+    <update id="rollbackStorage">
+        update t_storage set  pre_count=0 where commodity_code = #{commodityCode}
+    </update>
+
+    <insert id="insertStorage" >
+        insert into t_storage (id,commodity_code,name,count)value
+        (#{storage.id},#{storage.commodityCode},#{storage.name},#{storage.count})
+    </insert>
+
 </mapper>

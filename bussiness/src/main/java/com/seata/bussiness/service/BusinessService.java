@@ -13,4 +13,7 @@ public interface BusinessService {
 
     ResponseData handleBusiness(BusinessDTO businessDTO);
 
+
+    ResponseData seataTccBusiness(BusinessDTO businessDTO);
+
 }

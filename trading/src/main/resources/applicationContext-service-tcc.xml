@@ -5,24 +5,18 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean id="tccDataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="${data.url}"/>
-        <property name="username" value="${data.name}"/>
-        <property name="password" value="${data.pass}"/>
-        <property name="initialSize" value="${data.initialSize}"/>
-        <property name="maxActive" value="${data.maxActive}"/>
-        <property name="maxWait" value="60000"/>
-        <property name="defaultAutoCommit" value="true"/>
-        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
-        <property name="minEvictableIdleTimeMillis" value="300000"/>
+    <bean id="transactionRepository" class="com.seata.common.tccredis.RedisClusterTransactionRepository">
+        <property name="keyPrefix" value="tcc_ut_"/>
+        <property name="jedisClusterExtend" ref="jedisClusterExtend"/>
     </bean>
-
-    <bean id="transactionRepository"
-          class="org.mengyun.tcctransaction.spring.repository.SpringJdbcTransactionRepository">
-        <property name="dataSource" ref="tccDataSource"/>
-        <property name="domain" value="STORAGE"/>
-        <property name="tbSuffix" value="_STORAGE"/>
+    <bean id="jedisClusterExtend" class="com.seata.common.tccredis.JedisClusterExtend">
+        <constructor-arg index="0" value="${redis.cluster.ip}" type="java.lang.String"/>
+        <constructor-arg index="1" value="${redis.cluster.pass}" type="java.lang.String"/>
+        <constructor-arg index="2" ref="jedisPoolConfig"/>
+    </bean>
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="1000"/>
+        <property name="maxWaitMillis" value="1000"/>
     </bean>
 
     <bean class="org.mengyun.tcctransaction.spring.recover.DefaultRecoverConfig">

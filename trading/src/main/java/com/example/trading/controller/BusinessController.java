@@ -39,9 +39,15 @@ public class BusinessController extends BaseController{
     ResponseData buss(HttpServletRequest request, HttpServletResponse response){
         Map<String,String> params = getParametersFromPage(request);
         logger.info("入参："+ JSON.toJSONString(params));
+        String flag = params.get("random");
         BusinessDTO businessDTO = new BusinessDTO();
         businessDTO.setUserId(params.get("userId"));
-        businessDTO.setCommodityCode(params.get("commodityCode"));
+        if("random".equals(flag)){
+            int index=(int)(Math.random()*50000) +1;
+            businessDTO.setCommodityCode("C2019-"+index);
+        }else {
+            businessDTO.setCommodityCode(params.get("commodityCode"));
+        }
         businessDTO.setCount(Integer.valueOf(params.get("count")));
         businessDTO.setAmount(new BigDecimal(params.get("amount")));
         businessDTO.setName(params.get("name"));
@@ -60,7 +66,13 @@ public class BusinessController extends BaseController{
         logger.info("入参："+ JSON.toJSONString(params));
         BusinessDTO businessDTO = new BusinessDTO();
         businessDTO.setUserId(params.get("userId"));
-        businessDTO.setCommodityCode(params.get("commodityCode"));
+        String flag = params.get("random");
+        if("random".equals(flag)){
+            int index=(int)(Math.random()*50000) +1;
+            businessDTO.setCommodityCode("C2019-"+index);
+        }else {
+            businessDTO.setCommodityCode(params.get("commodityCode"));
+        }
         businessDTO.setCount(Integer.valueOf(params.get("count")));
         businessDTO.setAmount(new BigDecimal(params.get("amount")));
         businessDTO.setName(params.get("name"));

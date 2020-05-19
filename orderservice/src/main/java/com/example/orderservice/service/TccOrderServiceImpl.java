@@ -1,5 +1,6 @@
 package com.example.orderservice.service;
 
+import com.alibaba.nacos.api.config.annotation.NacosValue;
 import com.example.commfacade.dto.OrderDTO;
 import com.example.commfacade.dto.ResponseData;
 import com.example.commfacade.service.TccOrderService;
@@ -12,12 +13,18 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 /**
  * Created by maxb on 2019/11/22.
  */
 public class TccOrderServiceImpl implements TccOrderService {
 
     private Logger logger = org.slf4j.LoggerFactory.getLogger("tccorder");
+
+    @NacosValue(value = "${order.probability}", autoRefreshed = true)
+    private Integer orderProbability;
+
 
     @Autowired
     private TOrderMapper tOrderMapper;
@@ -31,6 +38,17 @@ public class TccOrderServiceImpl implements TccOrderService {
         tOrder.setCount(orderDTO.getOrderCount());
         tOrder.setAmount(orderDTO.getOrderAmount().doubleValue());
         tOrderMapper.createOrder(tOrder);
+        if("fail".equals(orderDTO.getFlag())){
+            Random random = new Random();
+            int num = random.nextInt(100);
+            if(num < orderProbability){
+                logger.info("随机数："+num + "概率："+orderProbability);
+                throw new RuntimeException("测试异常");
+            }
+        }
+        if("kenan".equals(orderDTO.getFlag())){
+            throw new RuntimeException("测试异常");
+        }
         return new ResponseData<OrderDTO>("200","success",orderDTO);
     }
 

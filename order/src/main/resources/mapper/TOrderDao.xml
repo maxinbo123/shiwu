@@ -20,4 +20,7 @@
         (#{order.orderNo},#{order.userId},#{order.commodityCode},#{order.count},#{order.amount})
     </insert>
 
+    <delete id="deleteById">
+        DELETE  t_order where order_no = #{order.orderNo}
+    </delete>
 </mapper>
